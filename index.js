@@ -63,4 +63,34 @@ app.post('/vaccines', async (req, res) => {
   }
 });
 
+// 📍 6. API: อัปเดตข้อมูลสัตว์เลี้ยง (แก้ Error 404)
+app.put('/pets/update', async (req, res) => {
+  const { id, pet_name, breed, birth_date, weight, chip_id, avatar } = req.body;
+  try {
+    await sql`
+      UPDATE pets 
+      SET pet_name = ${pet_name}, 
+          breed = ${breed}, 
+          birth_date = ${birth_date}, 
+          weight = ${weight}, 
+          chip_id = ${chip_id}, 
+          avatar = ${avatar}
+      WHERE id = ${id}`;
+    res.json({ message: "อัปเดตข้อมูลสำเร็จ!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// 📍 7. API: ลบข้อมูลสัตว์เลี้ยง (เผื่อเตงกดปุ่มลบหน้าแรก)
+app.delete('/pets', async (req, res) => {
+  const { id } = req.body;
+  try {
+    await sql`DELETE FROM pets WHERE id = ${id}`;
+    res.json({ message: "ลบข้อมูลสำเร็จ!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = app;
