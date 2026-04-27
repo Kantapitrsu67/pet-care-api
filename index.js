@@ -124,4 +124,17 @@ app.post('/others', async (req, res) => {
   }
 });
 
+// 📍 API: ลบข้อมูลสัตว์เลี้ยงทั้งหมด (Delete All)
+app.delete('/pets/all', async (req, res) => {
+  try {
+    await sql`DELETE FROM pets`;
+    await sql`DELETE FROM vaccines`;
+    await sql`DELETE FROM treatments`;
+    await sql`DELETE FROM others`;
+    res.json({ message: "ล้างข้อมูลทั้งหมดเรียบร้อยแล้ว" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = app;
