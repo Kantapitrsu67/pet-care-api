@@ -93,4 +93,17 @@ app.delete('/pets', async (req, res) => {
   }
 });
 
+// 📍 API: เพิ่มประวัติการรักษา
+app.post('/treatments', async (req, res) => {
+  const { pet_id, diagnosis, result, treatment_date, location, cost } = req.body;
+  try {
+    await sql`
+      INSERT INTO treatments (pet_id, diagnosis, result, treatment_date, location, cost)
+      VALUES (${pet_id}, ${diagnosis}, ${result}, ${treatment_date}, ${location}, ${cost})`;
+    res.json({ message: "บันทึกการรักษาสำเร็จ!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = app;
