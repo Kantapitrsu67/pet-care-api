@@ -109,4 +109,17 @@ app.post('/treatments', async (req, res) => {
   }
 });
 
+// 📍 API: เพิ่มข้อมูลเพิ่มเติม (Others)
+app.post('/others', async (req, res) => {
+  const { pet_id, topic, description, record_date } = req.body;
+  try {
+    await sql`
+      INSERT INTO others (pet_id, topic, description, record_date)
+      VALUES (${pet_id}, ${topic}, ${description}, ${record_date})`;
+    res.json({ message: "บันทึกข้อมูลเพิ่มเติมสำเร็จ!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = app;
