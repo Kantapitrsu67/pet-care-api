@@ -35,18 +35,20 @@ app.post('/pets', async (req, res) => {
   }
 });
 
-// 4. ดึงข้อมูลรายละเอียดน้องตัวเดียว + ประวัติวัคซีน + การรักษา
+// 4. ดึงข้อมูลรายละเอียดน้องตัวเดียว + ประวัติวัคซีน + การรักษา + เพิ่มเติม
 app.get('/pets/:id', async (req, res) => {
   const petId = req.params.id;
   try {
     const pet = await sql`SELECT * FROM pets WHERE id = ${petId}`;
     const vaccines = await sql`SELECT * FROM vaccines WHERE pet_id = ${petId}`;
-    const treatments = await sql`SELECT * FROM treatments WHERE pet_id = ${petId}`; // 📍 เพิ่มบรรทัดนี้
+    const treatments = await sql`SELECT * FROM treatments WHERE pet_id = ${petId}`;
+    const others = await sql`SELECT * FROM others WHERE pet_id = ${petId}`; // 📍 เพิ่มบรรทัดนี้
     
     res.json({
       info: pet.rows[0],
       vaccines: vaccines.rows,
-      treatments: treatments.rows // 📍 เพิ่มบรรทัดนี้
+      treatments: treatments.rows,
+      others: others.rows // 📍 เพิ่มบรรทัดนี้
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
